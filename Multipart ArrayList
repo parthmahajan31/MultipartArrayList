@@ -1,0 +1,16 @@
+  val body: ArrayList<MultipartBody.Part> = ArrayList()
+        for (i in 0 until mResults.size){
+            val file = File(mResults[i])
+            val requestFile: RequestBody =
+                    file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+            body.add(MultipartBody.Part.createFormData("product_image["+i+"]", file.name, requestFile))
+        }
+        val RQ_category: RequestBody = category.toRequestBody("text/plain".toMediaType())
+        val RQ_name: RequestBody = name.toRequestBody("text/plain".toMediaType())
+        val RQ_desc: RequestBody = desc.toRequestBody("text/plain".toMediaType())
+        val RQ_date: RequestBody = date.toRequestBody("text/plain".toMediaType())
+        mvvm.saveData(this, RQ_category,RQ_name, RQ_desc, RQ_date,  body).observe(this, androidx.lifecycle.Observer {
+            if(it.status=="success"){
+                Toast.makeText(this, it.message.toString(), Toast.LENGTH_LONG).show()
+            }
+        })
